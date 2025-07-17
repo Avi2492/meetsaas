@@ -30,6 +30,7 @@ const formSchema = z.object({
 export const SignInView = () => {
 	const router = useRouter();
 	const [error, setError] = useState<string | null>(null);
+	const [pending, setPending] = useState(false);
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -41,6 +42,7 @@ export const SignInView = () => {
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
 		setError(null);
+		setPending(true);
 
 		authClient.signIn.email(
 			{
@@ -50,6 +52,7 @@ export const SignInView = () => {
 			{
 				onSuccess: () => {
 					router.push("/dashboard");
+					setPending(false);
 				},
 				onError: ({ error }) => {
 					setError(error.message);
@@ -120,7 +123,8 @@ export const SignInView = () => {
 
 								<Button
 									type="submit"
-									className="w-full">
+									className="w-full"
+									disabled={pending}>
 									Sign In
 								</Button>
 
@@ -134,7 +138,8 @@ export const SignInView = () => {
 									<Button
 										variant={"outline"}
 										type="button"
-										className="w-full py-2">
+										className="w-full py-2"
+										disabled={pending}>
 										<Image
 											src={"/google.png"}
 											width={30}
@@ -145,7 +150,8 @@ export const SignInView = () => {
 									<Button
 										variant={"outline"}
 										type="button"
-										className="w-full py-2">
+										className="w-full py-2"
+										disabled={pending}>
 										<Image
 											src={"/github.png"}
 											width={30}
