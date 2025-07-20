@@ -18,9 +18,9 @@ import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { OctagonAlertIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
 	email: z.string().email(),
@@ -48,10 +48,31 @@ export const SignInView = () => {
 			{
 				email: data.email,
 				password: data.password,
+				callbackURL: "/dashboard",
 			},
 			{
 				onSuccess: () => {
+					setPending(false);
 					router.push("/dashboard");
+				},
+				onError: ({ error }) => {
+					setError(error.message);
+				},
+			},
+		);
+	};
+
+	const onSocial = async (provider: "github" | "google") => {
+		setError(null);
+		setPending(true);
+
+		authClient.signIn.social(
+			{
+				provider: provider,
+				callbackURL: "/dashboard",
+			},
+			{
+				onSuccess: () => {
 					setPending(false);
 				},
 				onError: ({ error }) => {
@@ -139,7 +160,8 @@ export const SignInView = () => {
 										variant={"outline"}
 										type="button"
 										className="w-full py-2"
-										disabled={pending}>
+										disabled={pending}
+										onClick={() => onSocial("google")}>
 										<Image
 											src={"/google.png"}
 											width={30}
@@ -151,7 +173,8 @@ export const SignInView = () => {
 										variant={"outline"}
 										type="button"
 										className="w-full py-2"
-										disabled={pending}>
+										disabled={pending}
+										onClick={() => onSocial("github")}>
 										<Image
 											src={"/github.png"}
 											width={30}

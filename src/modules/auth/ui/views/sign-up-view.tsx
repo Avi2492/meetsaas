@@ -58,10 +58,31 @@ export const SignUpView = () => {
 				name: data.name,
 				email: data.email,
 				password: data.password,
+				callbackURL: "/dashboard",
 			},
 			{
 				onSuccess: () => {
+					setPending(false);
 					router.push("/dashboard");
+				},
+				onError: ({ error }) => {
+					setError(error.message);
+				},
+			},
+		);
+	};
+
+	const onSocial = async (provider: "github" | "google") => {
+		setError(null);
+		setPending(true);
+
+		authClient.signIn.social(
+			{
+				provider: provider,
+				callbackURL: "/dashboard",
+			},
+			{
+				onSuccess: () => {
 					setPending(false);
 				},
 				onError: ({ error }) => {
@@ -187,7 +208,8 @@ export const SignUpView = () => {
 										variant={"outline"}
 										type="button"
 										className="w-full py-2"
-										disabled={pending}>
+										disabled={pending}
+										onClick={() => onSocial("google")}>
 										<Image
 											src={"/google.png"}
 											width={30}
@@ -199,7 +221,8 @@ export const SignUpView = () => {
 										variant={"outline"}
 										type="button"
 										className="w-full py-2"
-										disabled={pending}>
+										disabled={pending}
+										onClick={() => onSocial("github")}>
 										<Image
 											src={"/github.png"}
 											width={30}
