@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import SvgLogo from "@/components/common/svg";
 
 const formSchema = z.object({
 	email: z.string().email(),
@@ -195,15 +196,14 @@ export const SignInView = () => {
 							</div>
 						</form>
 					</Form>
-					<div className="bg-radial from-[#129990] to-[#06202B] relative hidden md:flex flex-col gap-y-4 items-center justify-center">
-						<img
-							src="/auth.png"
+					<div className="bg-radial from-sidebar-accent to-sidebar relative hidden md:flex flex-col gap-y-4 items-center justify-center">
+						{/* <img
+							src="/logo-1.svg"
 							alt="image"
-							className="w-[100%]"
-							// width={92}
-							// height={92}
-						/>
-						{/* <p className="text-2xl font-semibold text-white">Meet.Ai</p> */}
+							className="w-[100] h-[100]"
+						/> */}
+						<SvgLogo />
+						<p className="text-2xl font-semibold text-white">Meet.Ai</p>
 					</div>
 				</CardContent>
 			</Card>
