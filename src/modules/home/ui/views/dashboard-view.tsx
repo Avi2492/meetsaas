@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
+import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -10,7 +11,14 @@ export const DashboardView = () => {
 	const { data: session } = authClient.useSession();
 
 	if (!session) {
-		return <p>Loading...</p>;
+		return (
+			<div className="flex items-center justify-center h-screen">
+				<Loader
+					className="animate-spin text-black"
+					size={40}
+				/>
+			</div>
+		);
 	}
 	return (
 		<div className="flex flex-col p-4 gap-y-4">

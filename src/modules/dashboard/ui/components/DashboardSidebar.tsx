@@ -49,7 +49,7 @@ const DashboardSidebar = () => {
 					href={"/"}
 					className="flex items-center gap-2 px-2 pt-2">
 					<Image
-						src={"/logo.svg"}
+						src={"/logo-1.svg"}
 						alt="logo"
 						width={36}
 						height={36}
