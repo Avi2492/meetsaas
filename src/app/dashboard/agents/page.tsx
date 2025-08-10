@@ -5,31 +5,46 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import LoadingState from "@/components/common/loading-state";
 import ErrorState from "@/components/common/error-state";
+import ListHeader from "@/modules/agents/components/list-header";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 const AgentsPage = async () => {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+
+	if (!session) {
+		redirect("/sign-in");
+	}
+
 	const queryClient = getQueryClient();
 	void queryClient.prefetchQuery(trpc.agents.getMany.queryOptions());
 
 	return (
-		<HydrationBoundary state={dehydrate(queryClient)}>
-			<Suspense
-				fallback={
-					<LoadingState
-						title="Loading Agents"
-						description="This may take a few seconds"
-					/>
-				}>
-				<ErrorBoundary
+		<>
+			<ListHeader />
+			<HydrationBoundary state={dehydrate(queryClient)}>
+				<Suspense
 					fallback={
-						<ErrorState
-							title="Error Loading Agents"
-							description="Please try again later."
+						<LoadingState
+							title="Loading Agents"
+							description="This may take a few seconds"
 						/>
 					}>
-					<AgentsView />
-				</ErrorBoundary>
-			</Suspense>
-		</HydrationBoundary>
+					<ErrorBoundary
+						fallback={
+							<ErrorState
+								title="Error Loading Agents"
+								description="Please try again later."
+							/>
+						}>
+						<AgentsView />
+					</ErrorBoundary>
+				</Suspense>
+			</HydrationBoundary>
+		</>
 	);
 };
 

@@ -144,5 +144,3 @@ const DashboardUserButton = () => {
 };
 
 export default DashboardUserButton;
-
-// Testing User -> deeptisuman@gmail.com, 123QWEasd!@#678
