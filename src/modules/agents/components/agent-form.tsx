@@ -37,7 +37,9 @@ export const AgentForm = ({
 	const createAgent = useMutation(
 		trpc.agents.create.mutationOptions({
 			onSuccess: async () => {
-				await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions());
+				await queryClient.invalidateQueries(
+					trpc.agents.getMany.queryOptions({}),
+				);
 
 				if (initialValues) {
 					await queryClient.invalidateQueries(
@@ -58,7 +60,7 @@ export const AgentForm = ({
 	const form = useForm<z.infer<typeof agentsInsertSchema>>({
 		resolver: zodResolver(agentsInsertSchema) as any,
 		defaultValues: {
-			name: initialValues?.name || "", 
+			name: initialValues?.name || "",
 			instructions: initialValues?.instructions || "",
 		},
 	});
