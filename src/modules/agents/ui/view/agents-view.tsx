@@ -2,6 +2,7 @@
 
 // import ErrorState from "@/components/common/error-state";
 // import LoadingState from "@/components/common/loading-state";
+import { useRouter } from "next/navigation";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { DataTable } from "../../components/data-table";
@@ -11,6 +12,7 @@ import { useAgentsFilters } from "../../hooks/use-agentsfilters";
 import { DataPagination } from "../../components/data-pagination";
 
 export const AgentsView = () => {
+	const router = useRouter();
 	const [filters, setFilters] = useAgentsFilters();
 	const trpc = useTRPC();
 	// const { data, isLoading, isError } = useQuery(
@@ -44,6 +46,7 @@ export const AgentsView = () => {
 			<DataTable
 				data={data.items}
 				columns={columns}
+				onRowClick={(row) => router.push(`/dashboard/agents/${row.id}`)}
 			/>
 
 			<DataPagination
